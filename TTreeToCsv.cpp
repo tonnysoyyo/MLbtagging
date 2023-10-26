@@ -22,8 +22,8 @@ void TTreeToCsv()
     using namespace std;
 
     // Abre el archivo de salida fuera del bucle
-    ofstream salida("output.csv");
-    salida << "Jet_Eta" << endl;
+    ofstream salida("output0.1.csv");
+    salida << "Jet_Eta" <<" "<< "Jet_Phi"<<" "<< "Particle_Eta"<<" "<< "Particle_Phi" << endl;
 
     Int_t nTen = nentries / 10;
     Int_t k = 0;
@@ -40,7 +40,7 @@ void TTreeToCsv()
         if (jentry == nentries - 1)
             cout << endl;
 
-        salida << t.Jet_Eta[0] << endl; // Accede al primer elemento del arreglo
+        salida << t.Jet_Eta[0] <<" "<< t.Jet_Phi[0]<<" "<< t.Particle_Eta[0] <<" "<< t.Particle_Phi[0] << endl; // Accede al primer elemento del arreglo
     }
 
     cout << "El archivo se escribió correctamente" << endl;
