@@ -1,8 +1,7 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Oct 26 12:41:25 2023 by ROOT version 6.28/04
-// from TTree Delphes/Analysis tree
-// found on file: Events/run_01/tag_1_delphes_events.root
+// Wed Mar 13 18:34:56 2024 by ROOT version 6.28/04
+// from TChain Delphes/
 //////////////////////////////////////////////////////////
 
 #ifndef MyClass_h
@@ -24,19 +23,19 @@ public :
 // Fixed size dimensions of array or collections stored in the TTree if any.
    static constexpr Int_t kMaxEvent = 1;
    static constexpr Int_t kMaxWeight = 2;
-   static constexpr Int_t kMaxParticle = 3442;
-   static constexpr Int_t kMaxTrack = 133;
-   static constexpr Int_t kMaxTower = 227;
-   static constexpr Int_t kMaxEFlowTrack = 133;
-   static constexpr Int_t kMaxEFlowPhoton = 63;
-   static constexpr Int_t kMaxEFlowNeutralHadron = 153;
-   static constexpr Int_t kMaxGenJet = 104;
+   static constexpr Int_t kMaxParticle = 3749;
+   static constexpr Int_t kMaxTrack = 155;
+   static constexpr Int_t kMaxTower = 258;
+   static constexpr Int_t kMaxEFlowTrack = 155;
+   static constexpr Int_t kMaxEFlowPhoton = 78;
+   static constexpr Int_t kMaxEFlowNeutralHadron = 159;
+   static constexpr Int_t kMaxGenJet = 7;
    static constexpr Int_t kMaxGenMissingET = 1;
-   static constexpr Int_t kMaxJet = 82;
+   static constexpr Int_t kMaxJet = 6;
    static constexpr Int_t kMaxElectron = 1;
-   static constexpr Int_t kMaxPhoton = 1;
+   static constexpr Int_t kMaxPhoton = 2;
    static constexpr Int_t kMaxMuon = 1;
-   static constexpr Int_t kMaxFatJet = 1;
+   static constexpr Int_t kMaxFatJet = 2;
    static constexpr Int_t kMaxMissingET = 1;
    static constexpr Int_t kMaxScalarHT = 1;
 
@@ -895,11 +894,24 @@ MyClass::MyClass(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Events/run_01/tag_1_delphes_events.root");
+
+#ifdef SINGLE_TREE
+      // The following code should be used if you want this class to access
+      // a single tree instead of a chain
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Memory Directory");
       if (!f || !f->IsOpen()) {
-         f = new TFile("Events/run_01/tag_1_delphes_events.root");
+         f = new TFile("Memory Directory");
       }
       f->GetObject("Delphes",tree);
+
+#else // SINGLE_TREE
+
+      // The following code should be used if you want this class to access a chain
+      // of trees.
+      TChain * chain = new TChain("Delphes","");
+      chain->Add("run_04.root/Delphes");
+      tree = chain;
+#endif // SINGLE_TREE
 
    }
    Init(tree);
