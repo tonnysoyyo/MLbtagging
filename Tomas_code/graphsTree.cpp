@@ -25,6 +25,7 @@ void graphsTree()
 
     // Jets por evento
     TH1F *hJetsPerEvent = new TH1F("hJetsPerEvent", "Numero de Jets por Evento", 100, 0, 6);
+    
     // pT de los jets
     TH1F *hJetPT[4];
     for (int i = 0; i < 4; i++) {
@@ -43,16 +44,66 @@ void graphsTree()
     hJetPT[i]->SetLineWidth(2);
 }
     // Eta de los jets
-    /*TH1F *hJetEta[4];
+    TH1F *hJetEta[4];
     for (int i = 0; i < 4; i++) {
         hJetEta[i] = new TH1F(Form("hJetEta%d", i), Form("Eta del Jet %d", i+1), 100, -5, 5); // Ajusta los límites según sea necesario
     
+    // Asigna un color único a cada histograma
+    if(i == 0) hJetEta[i]->SetLineColor(kRed);
+    else if(i == 1) hJetEta[i]->SetLineColor(kBlue);
+    else if(i == 2) hJetEta[i]->SetLineColor(kGreen);
+    else if(i == 3) hJetEta[i]->SetLineColor(kBlack);
+    
+    // Opcional: Establece el estilo de línea
+    hJetEta[i]->SetLineStyle(i + 1); // Diferentes estilos de línea para cada histograma
+    
+    // Opcional: Establece el grosor de la línea
+    hJetEta[i]->SetLineWidth(2);
     }
     // Phi de los jets
     TH1F *hJetPhi[4];
     for (int i = 0; i < 4; i++) {
         hJetPhi[i] = new TH1F(Form("hJetPhi%d", i), Form("Phi del Jet %d", i+1), 100, -4, 4); // Ajusta los límites según sea necesario
-    }*/
+        // Asigna un color único a cada histograma
+    if(i == 0) hJetPhi[i]->SetLineColor(kRed);
+    else if(i == 1) hJetPhi[i]->SetLineColor(kBlue);
+    else if(i == 2) hJetPhi[i]->SetLineColor(kGreen);
+    else if(i == 3) hJetPhi[i]->SetLineColor(kBlack);
+    
+    // Opcional: Establece el estilo de línea
+    hJetPhi[i]->SetLineStyle(i + 1); // Diferentes estilos de línea para cada histograma
+    
+    // Opcional: Establece el grosor de la línea
+    hJetPhi[i]->SetLineWidth(2);
+    }
+
+    // Número de partículas cargadas por jet
+    TH1F *hChargedParticles[4];
+    for (int i = 0; i < 4; i++) {
+        hChargedParticles[i] = new TH1F(Form("hChargedParticles%d", i), Form("Numero de Partículas Cargadas del Jet %d", i+1), 100, -0.5, 3.5);
+    // Asigna un color único a cada histograma
+    if(i == 0) hChargedParticles[i]->SetLineColor(kRed);
+    else if(i == 1) hChargedParticles[i]->SetLineColor(kBlue);
+    else if(i == 2) hChargedParticles[i]->SetLineColor(kGreen);
+    else if(i == 3) hChargedParticles[i]->SetLineColor(kBlack);
+    
+    hChargedParticles[i]->SetLineStyle(i + 1); // Diferentes estilos de línea para cada histograma
+    hChargedParticles[i]->SetLineWidth(2);
+    }
+
+    // Número de neutras cargadas por jet
+    TH1F *hNeutralsParticles[4];
+    for (int i = 0; i < 4; i++) {
+        hNeutralsParticles[i] = new TH1F(Form("hNeutralsParticles%d", i), Form("Numero de Partículas Cargadas del Jet %d", i+1), 100, -0.5, 3.5);
+    // Asigna un color único a cada histograma
+    if(i == 0) hNeutralsParticles[i]->SetLineColor(kRed);
+    else if(i == 1) hNeutralsParticles[i]->SetLineColor(kBlue);
+    else if(i == 2) hNeutralsParticles[i]->SetLineColor(kGreen);
+    else if(i == 3) hNeutralsParticles[i]->SetLineColor(kBlack);
+    
+    hNeutralsParticles[i]->SetLineStyle(i + 1); // Diferentes estilos de línea para cada histograma
+    hNeutralsParticles[i]->SetLineWidth(2);
+    }
 
     cout << " Entries : " << nentries << endl;
 
@@ -117,19 +168,30 @@ void graphsTree()
         hJetPT[i]->Fill(t.Jet_PT[i]);
         }
         // Histograma de Eta de los jets
-        /*for (int i = 0; i < std::min(4, t.Jet_size); i++) {
+        for (int i = 0; i < std::min(4, t.Jet_size); i++) {
         hJetEta[i]->Fill(t.Jet_Eta[i]);
         }
         // Histograma de Phi de los jets
         for (int i = 0; i < std::min(4, t.Jet_size); i++) {
         hJetPhi[i]->Fill(t.Jet_Phi[i]);
-        }*/
+        }
 
+        // Histograma de Número de partículas por jet
+        for (int i = 0; i < std::min(4, t.Jet_size); i++) {
+        hChargedParticles[i]->Fill(t.Jet_NCharged[i]);
+        }
+
+        // Histograma de Número de partículas por jet
+        for (int i = 0; i < std::min(4, t.Jet_size); i++) {
+        hNeutralsParticles[i]->Fill(t.Jet_NNeutrals[i]);
+        }
     }
 
     // Dibuja el histograma
     // Dibujar histograma de jets por evento
-    //hJetsPerEvent->Draw();
+    TCanvas *cJets = new TCanvas("cJets", "Jets por evento", 600, 400);
+    hJetsPerEvent->Draw();
+
     // Dibujar histograma de pT de los jets
     TCanvas *c1 = new TCanvas("c1", "pT de los Jets", 600, 400);
     gStyle->SetOptStat(0); // Desactiva la caja de estadísticas para todos los histogramas
@@ -144,16 +206,65 @@ void graphsTree()
     }
     legend->Draw();
 
-    // Dibujar histograma de Eta de los jets
-    /*for (int i = 0; i < 4; i++) {
-    hJetEta[i]->Draw("SAME"); // Para superponer, o dibuja individualmente
+    TCanvas *cEta = new TCanvas("cEta", "Eta de los Jets", 600, 400);
+    gStyle->SetOptStat(0); // Desactiva la caja de estadísticas para todos los histogramas
+    hJetEta[0]->Draw(); // Dibuja el primer histograma
+    for (int i = 1; i < 4; i++) {
+        hJetEta[i]->Draw("SAME"); // Superpone los siguientes histogramas
     }
-    // Dibujar histograma de Phi de los jets
+    TLegend *legendEta = new TLegend(0.7, 0.7, 0.9, 0.9); // Ajusta la posición según sea necesario
+    legendEta->SetHeader("Jets", "C"); // Opcional: título de la leyenda
     for (int i = 0; i < 4; i++) {
-    hJetPhi[i]->Draw("SAME"); // Para superponer, o dibuja individualmente
-    }*/
-    c1->Print("plots/PTjets.png");  
+        legendEta->AddEntry(hJetEta[i], Form("Jet %d", i+1), "l");
+    }
+    legendEta->Draw();
 
+    TCanvas *cPhi = new TCanvas("cPhi", "Phi de los Jets", 600, 400);
+    gStyle->SetOptStat(0); // Desactiva la caja de estadísticas para todos los histogramas
+    hJetPhi[0]->Draw(); // Dibuja el primer histograma
+    for (int i = 1; i < 4; i++) {
+        hJetPhi[i]->Draw("SAME"); // Superpone los siguientes histogramas
+    }
+    TLegend *legendPhi = new TLegend(0.7, 0.7, 0.9, 0.9); // Ajusta la posición según sea necesario
+    legendPhi->SetHeader("Jets", "C"); // Opcional: título de la leyenda
+    for (int i = 0; i < 4; i++) {
+        legendPhi->AddEntry(hJetPhi[i], Form("Jet %d", i+1), "l");
+    }
+    legendPhi->Draw();
+
+    TCanvas *cNCharged = new TCanvas("cNCharged", "Numero de partículas cargadas por jet", 600, 400);
+    gStyle->SetOptStat(0); // Desactiva la caja de estadísticas para todos los histogramas
+    hChargedParticles[0]->Draw(); // Dibuja el primer histograma
+    for (int i = 1; i < 4; i++) {
+        hChargedParticles[i]->Draw("SAME"); // Superpone los siguientes histogramas
+    }
+    TLegend *legendNCharged = new TLegend(0.7, 0.7, 0.9, 0.9); // Ajusta la posición según sea necesario
+    legendNCharged->SetHeader("Jets", "C"); // Opcional: título de la leyenda
+    for (int i = 0; i < 4; i++) {
+        legendNCharged->AddEntry(hChargedParticles[i], Form("Jet %d", i+1), "l");
+    }
+    legendNCharged->Draw();
+
+    TCanvas *cNNeutrals = new TCanvas("cNNeutrals", "Numero de partículas neutras por jet", 600, 400);
+    gStyle->SetOptStat(0); // Desactiva la caja de estadísticas para todos los histogramas
+    hNeutralsParticles[0]->Draw(); // Dibuja el primer histograma
+    for (int i = 1; i < 4; i++) {
+        hNeutralsParticles[i]->Draw("SAME"); // Superpone los siguientes histogramas
+    }
+    TLegend *legendNNeutrals = new TLegend(0.7, 0.7, 0.9, 0.9); // Ajusta la posición según sea necesario
+    legendNNeutrals->SetHeader("Jets", "C"); // Opcional: título de la leyenda
+    for (int i = 0; i < 4; i++) {
+        legendNNeutrals->AddEntry(hNeutralsParticles[i], Form("Jet %d", i+1), "l");
+    }
+    legendNNeutrals->Draw();
+
+    // Guardar los histogramas en un archivo
+    cJets->Print("plots/JetsPerEvent.png");
+    c1->Print("plots/PTjets.png");
+    cEta->Print("plots/Etajets.png");
+    cPhi->Print("plots/Phijets.png");
+    cNCharged->Print("plots/NCharged.png");
+    cNNeutrals->Print("plots/NNeutrals.png");
 
     cout << "El archivo se escribió correctamente" << endl;
 
