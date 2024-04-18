@@ -13,7 +13,7 @@ void reduceTTree()
 {
     // Creamos un objeto TChain para leer los rootfiles
     TChain *ch = new TChain("Delphes", "");
-    ch->Add("../rootfiles/run_01.root");
+    ch->Add("../tag_1_delphes_events.root");
     // ch->Add("../rootfiles/run_02.root");
     // ch->Add("../rootfiles/run_03.root");
     // ch->Add("../rootfiles/run_04.root");
