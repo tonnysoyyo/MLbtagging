@@ -6,14 +6,14 @@
 #include <vector>
 #include "iostream"
 #include "fstream"
-#include "/home/juan27/MLbtagging/Tomas_code/MyClass.C"
+#include "MyClass.C"
 using namespace std;
 
 void graphsTree()
 {
     // Creamos un objeto TChain para leer los rootfiles
     TChain *ch = new TChain("Delphes", "");
-    ch->Add("tag_1_delphes_events.root");
+    ch->Add("../rootfiles/run_01.root");
     // ch->Add("../rootfiles/run_02.root");
     // ch->Add("../rootfiles/run_03.root");
     // ch->Add("../rootfiles/run_04.root");
