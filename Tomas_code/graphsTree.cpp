@@ -21,7 +21,7 @@ void graphsTree()
     TTree *Delphes = (TTree*)ch;
     Delphes->MakeClass("MyClass"); // Crea la clase de lectura de la TTree
     MyClass t(Delphes); // Evalúa la clase de lectura de la TTree
-    Long64_t nentries = 1000;//t.fChain->GetEntries(); // Obtiene el número de entradas en la TTree 
+    Long64_t nentries = 10000;//t.fChain->GetEntries(); // Obtiene el número de entradas en la TTree 
 
     // Jets por evento
     TH1F *hJetsPerEvent = new TH1F("hJetsPerEvent", "Numero de Jets por Evento", 100, 0, 6);
@@ -60,6 +60,7 @@ void graphsTree()
     // Opcional: Establece el grosor de la línea
     hJetEta[i]->SetLineWidth(2);
     }
+
     // Phi de los jets
     TH1F *hJetPhi[4];
     for (int i = 0; i < 4; i++) {
@@ -104,6 +105,37 @@ void graphsTree()
     hNeutralsParticles[i]->SetLineStyle(i + 1); // Diferentes estilos de línea para cada histograma
     hNeutralsParticles[i]->SetLineWidth(2);
     }
+
+    // Histograma de fracción de pT cargado del jet
+    TH1F *hChargedPTFraction[4];
+    for (int i = 0; i < 4; i++) {
+    hChargedPTFraction[i] = new TH1F(Form("hChargedPTFraction%d", i), Form("Fracción de pT cargado del Jet %d", i+1), 100, 0, 1);
+    
+    // Asigna un color único a cada histograma
+    if(i == 0) hChargedPTFraction[i]->SetLineColor(kRed);
+    else if(i == 1) hChargedPTFraction[i]->SetLineColor(kBlue);
+    else if(i == 2) hChargedPTFraction[i]->SetLineColor(kGreen);
+    else if(i == 3) hChargedPTFraction[i]->SetLineColor(kBlack);
+    
+    hChargedPTFraction[i]->SetLineStyle(i + 1); // Different line styles for each histogram
+    hChargedPTFraction[i]->SetLineWidth(2);
+    }
+
+    // Histograma de fracción de pT neutro del jet
+    TH1F *hNeutralPTFraction[4];
+    for (int i = 0; i < 4; i++) {
+    hNeutralPTFraction[i] = new TH1F(Form("hNeutralPTFraction%d", i), Form("Fracción de pT neutro del Jet %d", i+1), 100, 0, 1);
+    
+    // Asigna un color único a cada histograma
+    if(i == 0) hNeutralPTFraction[i]->SetLineColor(kRed);
+    else if(i == 1) hNeutralPTFraction[i]->SetLineColor(kBlue);
+    else if(i == 2) hNeutralPTFraction[i]->SetLineColor(kGreen);
+    else if(i == 3) hNeutralPTFraction[i]->SetLineColor(kBlack);
+    
+    hNeutralPTFraction[i]->SetLineStyle(i + 1); // Different line styles for each histogram
+    hNeutralPTFraction[i]->SetLineWidth(2);
+    }
+
 
     cout << " Entries : " << nentries << endl;
 
@@ -167,23 +199,75 @@ void graphsTree()
         for (int i = 0; i < std::min(4, t.Jet_size); i++) {
         hJetPT[i]->Fill(t.Jet_PT[i]);
         }
+
         // Histograma de Eta de los jets
         for (int i = 0; i < std::min(4, t.Jet_size); i++) {
         hJetEta[i]->Fill(t.Jet_Eta[i]);
         }
+
         // Histograma de Phi de los jets
         for (int i = 0; i < std::min(4, t.Jet_size); i++) {
         hJetPhi[i]->Fill(t.Jet_Phi[i]);
         }
 
-        // Histograma de Número de partículas por jet
+        // Histograma de Número de partículas cargadas por jet
         for (int i = 0; i < std::min(4, t.Jet_size); i++) {
         hChargedParticles[i]->Fill(t.Jet_NCharged[i]);
         }
 
-        // Histograma de Número de partículas por jet
+        // Histograma de Número de partículas neutras por jet
         for (int i = 0; i < std::min(4, t.Jet_size); i++) {
         hNeutralsParticles[i]->Fill(t.Jet_NNeutrals[i]);
+        }
+
+        // Fracción de pT cargado del jet
+        for (Int_t i = 0; i < t.Jet_size; i++) {
+        TLorentzVector jetVector;
+        jetVector.SetPtEtaPhiM(t.Jet_PT[i], t.Jet_Eta[i], t.Jet_Phi[i], t.Jet_Mass[i]);
+
+        TLorentzVector chargedPTSum(0, 0, 0, 0); // Initialize to zero
+
+        // Loop over particles to sum charged ones
+        for (Int_t j = 0; j < t.Particle_size; j++) {
+            if (t.Particle_Charge[j] != 0) { // Check if particle is charged
+                TLorentzVector particleVector;
+                particleVector.SetPtEtaPhiM(t.Particle_PT[j], t.Particle_Eta[j], t.Particle_Phi[j], t.Particle_Mass[j]);
+                chargedPTSum += particleVector; // Vector sum
+            }
+        }
+
+        // Calculate fraction of charged pT
+        Double_t chargedPTFraction = chargedPTSum.Pt() / jetVector.Pt();
+
+        // Fill the histogram for the current jet
+        if (i < 4) {
+        hChargedPTFraction[i]->Fill(chargedPTFraction);
+        }
+        }
+
+        // Fracción de pT neutro del jet 
+        for (Int_t i = 0; i < t.Jet_size; i++) {
+        TLorentzVector jetVector;
+        jetVector.SetPtEtaPhiM(t.Jet_PT[i], t.Jet_Eta[i], t.Jet_Phi[i], t.Jet_Mass[i]);
+
+        TLorentzVector neutralPTSum(0, 0, 0, 0); // Initialize to zero
+
+        // Loop over particles to sum neutral ones
+        for (Int_t j = 0; j < t.Particle_size; j++) {
+            if (t.Particle_Charge[j] == 0) { // Check if particle is neutral
+                TLorentzVector particleVector;
+                particleVector.SetPtEtaPhiM(t.Particle_PT[j], t.Particle_Eta[j], t.Particle_Phi[j], t.Particle_Mass[j]);
+                neutralPTSum += particleVector; // Vector sum
+            }
+        }
+
+        // Calculate fraction of neutral pT
+        Double_t neutralPTFraction = neutralPTSum.Pt() / jetVector.Pt();
+
+        // Fill the histogram for the current jet
+        if (i < 4) {
+            hNeutralPTFraction[i]->Fill(neutralPTFraction);
+        }
         }
     }
 
@@ -258,6 +342,33 @@ void graphsTree()
     }
     legendNNeutrals->Draw();
 
+    TCanvas *cChargedPTFraction = new TCanvas("cChargedPTFraction", "Fracción de pT cargado del Jet", 600, 400);
+    gStyle->SetOptStat(0); // Disable the statistics box for all histograms
+    hChargedPTFraction[0]->Draw(); // Draw the first histogram
+    for (int i = 1; i < 4; i++) {
+        hChargedPTFraction[i]->Draw("SAME"); // Overlay the other histograms
+    }
+    TLegend *legendChargedPTFraction = new TLegend(0.7, 0.7, 0.9, 0.9); // Adjust the position as necessary
+    legendChargedPTFraction->SetHeader("Jets", "C"); // Optional: legend title
+    for (int i = 0; i < 4; i++) {
+        legendChargedPTFraction->AddEntry(hChargedPTFraction[i], Form("Jet %d", i+1), "l");
+    }
+    legendChargedPTFraction->Draw();
+
+    TCanvas *cNeutralPTFraction = new TCanvas("cNeutralPTFraction", "Fracción de pT neutro del Jet", 600, 400);
+    gStyle->SetOptStat(0); // Disable the statistics box for all histograms
+    hNeutralPTFraction[0]->Draw(); // Draw the first histogram
+    for (int i = 1; i < 4; i++) {
+        hNeutralPTFraction[i]->Draw("SAME"); // Overlay the other histograms
+    }
+    TLegend *legendNeutralPTFraction = new TLegend(0.7, 0.7, 0.9, 0.9); // Adjust the position as necessary
+    legendNeutralPTFraction->SetHeader("Jets", "C"); // Optional: legend title
+    for (int i = 0; i < 4; i++) {
+        legendNeutralPTFraction->AddEntry(hNeutralPTFraction[i], Form("Jet %d", i+1), "l");
+    }
+    legendNeutralPTFraction->Draw();
+
+
     // Guardar los histogramas en un archivo
     cJets->Print("plots/JetsPerEvent.png");
     c1->Print("plots/PTjets.png");
@@ -265,6 +376,8 @@ void graphsTree()
     cPhi->Print("plots/Phijets.png");
     cNCharged->Print("plots/NCharged.png");
     cNNeutrals->Print("plots/NNeutrals.png");
+    cChargedPTFraction->Print("plots/ChargedPTFraction.png");
+    cNeutralPTFraction->Print("plots/NeutralPTFraction.png");
 
     cout << "El archivo se escribió correctamente" << endl;
 
