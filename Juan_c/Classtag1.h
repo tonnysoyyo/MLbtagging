@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Wed Apr 17 19:27:30 2024 by ROOT version 6.30/04
+// Tue Jul 16 21:34:18 2024 by ROOT version 6.30/06
 // from TChain Delphes/
 //////////////////////////////////////////////////////////
 
-#ifndef MyClass_h
-#define MyClass_h
+#ifndef Classtag1_h
+#define Classtag1_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -15,7 +15,7 @@
 #include "TClonesArray.h"
 #include "TObject.h"
 
-class MyClass {
+class Classtag1 {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
@@ -875,8 +875,8 @@ public :
    TBranch        *b_ScalarHT_HT;   //!
    TBranch        *b_ScalarHT_size;   //!
 
-   MyClass(TTree *tree=0);
-   virtual ~MyClass();
+   Classtag1(TTree *tree=0);
+   virtual ~Classtag1();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
@@ -888,8 +888,8 @@ public :
 
 #endif
 
-#ifdef MyClass_cxx
-MyClass::MyClass(TTree *tree) : fChain(0) 
+#ifdef Classtag1_cxx
+Classtag1::Classtag1(TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
@@ -909,7 +909,7 @@ MyClass::MyClass(TTree *tree) : fChain(0)
       // The following code should be used if you want this class to access a chain
       // of trees.
       TChain * chain = new TChain("Delphes","");
-      chain->Add("tag_1_delphes_events.root/Delphes");
+      chain->Add("../tag_1_delphes_events.root/Delphes");
       tree = chain;
 #endif // SINGLE_TREE
 
@@ -917,19 +917,19 @@ MyClass::MyClass(TTree *tree) : fChain(0)
    Init(tree);
 }
 
-MyClass::~MyClass()
+Classtag1::~Classtag1()
 {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
 }
 
-Int_t MyClass::GetEntry(Long64_t entry)
+Int_t Classtag1::GetEntry(Long64_t entry)
 {
 // Read contents of entry.
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }
-Long64_t MyClass::LoadTree(Long64_t entry)
+Long64_t Classtag1::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
    if (!fChain) return -5;
@@ -942,7 +942,7 @@ Long64_t MyClass::LoadTree(Long64_t entry)
    return centry;
 }
 
-void MyClass::Init(TTree *tree)
+void Classtag1::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -1377,7 +1377,7 @@ void MyClass::Init(TTree *tree)
    Notify();
 }
 
-Bool_t MyClass::Notify()
+Bool_t Classtag1::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -1388,18 +1388,18 @@ Bool_t MyClass::Notify()
    return kTRUE;
 }
 
-void MyClass::Show(Long64_t entry)
+void Classtag1::Show(Long64_t entry)
 {
 // Print contents of entry.
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
 }
-Int_t MyClass::Cut(Long64_t entry)
+Int_t Classtag1::Cut(Long64_t entry)
 {
 // This function may be called from Loop.
 // returns  1 if entry is accepted.
 // returns -1 otherwise.
    return 1;
 }
-#endif // #ifdef MyClass_cxx
+#endif // #ifdef Classtag1_cxx

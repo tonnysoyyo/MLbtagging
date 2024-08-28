@@ -105,27 +105,6 @@ void Borrador_graficas()
     }
 
     cout << "El archivo se escribió correctamente" << endl;
-    // Dibuja el histograma
-    //hJetsPerEvent->Draw();
-    // TCanvas *c1 = new TCanvas("c1", "pT de los Jets", 600, 400);
-    // gStyle->SetOptStat(0); // Desactiva la caja de estadísticas para todos los histogramas
-
-    // hJetPT[0]->Draw(); // Dibuja el primer histograma
-    // for (int i = 1; i < 4; i++) {
-    //     hJetPT[i]->Draw("SAME"); // Superpone los siguientes histogramas
-    // }
-
-    // // Añade la leyenda después de dibujar los histogramas
-    // TLegend *legend = new TLegend(0.7, 0.7, 0.9, 0.9);
-    // legend->SetHeader("Jets", "C");
-    // for (int i = 0; i < 4; i++) {
-    //     legend->AddEntry(hJetPT[i], Form("Jet %d", i+1), "l");
-    // }
-    // legend->Draw();
-
-    // c1->Update(); // Actualiza el canvas para aplicar los cambios
-    //_____________________________________________________//
-    // Dibuja el histograma de deltaR
     hDeltaR->Draw();
     cout << "Fin del programa" << endl;
 }
