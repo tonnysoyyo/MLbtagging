@@ -78,6 +78,31 @@ void graphsTree()
     hJetPhi[i]->SetLineWidth(2);
     }
 
+    //Adicion del punto numero 5, Delta R entre los primeros 4 jets, por parejas
+    TH1F *hDeltaRPar[6];
+    for (int i = 0; i < 6; i++)
+    {
+        hDeltaRPar[i] = new TH1F(Form("hDeltaRPar%d", i), Form("Delta R entre los primeros 4 jets, por parejas %d", i + 1), 100, 0, 6);
+        // Asigna un color único a cada histograma
+        if (i == 0)
+            hDeltaRPar[i]->SetLineColor(kRed);
+        else if (i == 1)
+            hDeltaRPar[i]->SetLineColor(kBlue);
+        else if (i == 2)
+            hDeltaRPar[i]->SetLineColor(kGreen);
+        else if (i == 3)
+            hDeltaRPar[i]->SetLineColor(kBlack);
+        else if (i == 4)
+            hDeltaRPar[i]->SetLineColor(kYellow);
+        else if (i == 5)
+            hDeltaRPar[i]->SetLineColor(kOrange);
+        // Opcional: Establece el estilo de línea
+        hDeltaRPar[i]->SetLineStyle(i + 1); // Diferentes estilos de línea para cada histograma
+        // Opcional: Establece el grosor de la línea
+        hDeltaRPar[i]->SetLineWidth(2);
+    }
+ 
+
     // Número de partículas cargadas por jet
     TH1F *hChargedParticles[4];
     for (int i = 0; i < 4; i++) {
@@ -331,6 +356,19 @@ void graphsTree()
     hR50PercentPT[i]->SetLineWidth(2);
     }
 
+    // Histogram for R containing 95% of the total pT from the jet center for each jet
+    TH1F *hR95PercentPT[4];
+    for (int i = 0; i < 4; i++) 
+    {
+        hR95PercentPT[i] = new TH1F(Form("hR95PercentPT%d", i), Form("R para 95%% pT total del Jet %d", i+1), 100, 0, 0.4);
+        // Assign a unique color to each histogram
+        if(i == 0) hR95PercentPT[i]->SetLineColor(kRed);
+        else if(i == 1) hR95PercentPT[i]->SetLineColor(kBlue);
+        else if(i == 2) hR95PercentPT[i]->SetLineColor(kGreen);
+        else if(i == 3) hR95PercentPT[i]->SetLineColor(kBlack);
+        hR95PercentPT[i]->SetLineStyle(i + 1); // Different line styles for each histogram
+        hR95PercentPT[i]->SetLineWidth(2);
+    }
 
     cout << " Entries : " << nentries << endl;
 
@@ -386,7 +424,7 @@ void graphsTree()
             deltaRValues[i].push_back(deltaR); // Aquí debería ser seguro hacer push_back
         }
         }
-    }
+        }
         // Histograma de jets por evento
         hJetsPerEvent->Fill(t.Jet_size);
 
@@ -403,6 +441,19 @@ void graphsTree()
         // Histograma de Phi de los jets
         for (int i = 0; i < std::min(4, t.Jet_size); i++) {
         hJetPhi[i]->Fill(t.Jet_Phi[i]);
+        }
+
+        //Delta R entre los primeros 4 jets, por parejas
+        for (int i = 0; i < 4; i++) {
+            for (int j = i + 1; j < 4; j++) {
+                double deltaR_par = jets[i].DeltaR(jets[j]);
+                if (i == 0 && j == 1) hDeltaRPar[0]->Fill(deltaR_par);
+                else if (i == 0 && j == 2) hDeltaRPar[1]->Fill(deltaR_par);
+                else if (i == 0 && j == 3) hDeltaRPar[2]->Fill(deltaR_par);
+                else if (i == 1 && j == 2) hDeltaRPar[3]->Fill(deltaR_par);
+                else if (i == 1 && j == 3) hDeltaRPar[4]->Fill(deltaR_par);
+                else if (i == 2 && j == 3) hDeltaRPar[5]->Fill(deltaR_par);
+            }
         }
 
         // Histograma de Número de partículas cargadas por jet
@@ -533,6 +584,80 @@ void graphsTree()
         hPTDifference[i]->Fill(ptDifference);
         }
         }
+
+        // R para 50% del pT total del jet
+        for (int i = 0; i < std::min(4, t.Jet_size); i++) {
+            std::vector<std::pair<double, TLorentzVector>> particles;
+
+            // Llenar y ordenar partículas por su distancia a cada jet
+            for (int j = 0; j < t.Particle_size; j++) {
+                TLorentzVector particleVector;
+                particleVector.SetPtEtaPhiM(t.Particle_PT[j], t.Particle_Eta[j], t.Particle_Phi[j], t.Particle_Mass[j]);
+                if (jets[i].DeltaR(particleVector) < 0.4) {  // Considera solo partículas dentro de un DeltaR de 0.4
+                    particles.push_back({jets[i].DeltaR(particleVector), particleVector});
+                }
+            }
+            
+            // Ordenar partículas por DeltaR
+            std::sort(particles.begin(), particles.end(), [](const auto& a, const auto& b) {
+            return a.first < b.first;
+            });
+
+            // Calcular pT total y determinar R para el 50% del pT
+            double totalPT = 0.0;
+            for (const auto& p : particles) {
+                totalPT += p.second.Pt();
+            }
+            double aimPT = totalPT * 0.5;
+            double currentPT = 0.0;
+            double r50PercentPT = 0.0;
+
+            for (const auto& p : particles) {
+                currentPT += p.second.Pt();
+                if (currentPT >= aimPT) {
+                    r50PercentPT = p.first;  // p.first contiene el DeltaR
+                    break;
+                }
+            }
+            hR50PercentPT[i]->Fill(r50PercentPT);  // guardamos
+        }
+
+        // R para 95% del pT total del jet
+        for (int i = 0; i < std::min(4, t.Jet_size); i++) {
+            std::vector<std::pair<double, TLorentzVector>> particles;
+
+            // Llenar y ordenar partículas por su distancia a cada jet
+            for (int j = 0; j < t.Particle_size; j++) {
+                TLorentzVector particleVector;
+                particleVector.SetPtEtaPhiM(t.Particle_PT[j], t.Particle_Eta[j], t.Particle_Phi[j], t.Particle_Mass[j]);
+                if (jets[i].DeltaR(particleVector) < 0.4) {  // Considera solo partículas dentro de un DeltaR de 0.4
+                    particles.push_back({jets[i].DeltaR(particleVector), particleVector});
+                }
+            }
+            
+            // Ordenar partículas por DeltaR
+            std::sort(particles.begin(), particles.end(), [](const auto& a, const auto& b) {
+            return a.first < b.first;
+            });
+
+            // Calcular pT total y determinar R para el 50% del pT
+            double totalPT = 0.0;
+            for (const auto& p : particles) {
+                totalPT += p.second.Pt();
+            }
+            double aimPT = totalPT * 0.95;
+            double currentPT = 0.0;
+            double r95PercentPT = 0.0;
+
+            for (const auto& p : particles) {
+                currentPT += p.second.Pt();
+                if (currentPT >= aimPT) {
+                    r95PercentPT = p.first;  // p.first contiene el DeltaR
+                    break;
+                }
+            }
+            hR95PercentPT[i]->Fill(r95PercentPT);  // guardamos
+        }
     }
 
     // Dibuja el histograma
@@ -579,6 +704,19 @@ void graphsTree()
         legendPhi->AddEntry(hJetPhi[i], Form("Jet %d", i+1), "l");
     }
     legendPhi->Draw();
+
+    TCanvas *cRPar = new TCanvas("cRPar", "R entre la primeras 4 parejas de jets", 600, 400);
+    gStyle->SetOptStat(0); // Desactiva la caja de estadísticas para todos los histogramas
+    hDeltaRPar[0 + 1]->Draw(); // Dibuja el primer histograma
+    for (int i = 1; i < 6; i++) {
+        hDeltaRPar[i]->Draw("SAME"); // Superpone los siguientes histogramas
+    }
+    TLegend *legendRPar = new TLegend(0.7, 0.7, 0.9, 0.9); // Ajusta la posición según sea necesario
+    legendRPar->SetHeader("Jets", "C"); // Opcional: título de la leyenda
+    for (int i = 0; i < 6; i++) {
+        legendRPar->AddEntry(hDeltaRPar[i], Form("Jet %d", i+1), "l");
+    }
+    legendRPar->Draw();
 
     TCanvas *cNCharged = new TCanvas("cNCharged", "Numero de partículas cargadas por jet", 600, 400);
     gStyle->SetOptStat(0); // Desactiva la caja de estadísticas para todos los histogramas
@@ -788,11 +926,38 @@ void graphsTree()
     }
     legendPTDifference->Draw();
 
+    // Plot R al 50%
+    TCanvas * cR50 = new TCanvas("cR50", "R al 50% del pT total del jet", 600, 400);
+    hR50PercentPT[0]->Draw();
+    for (int i = 1; i < 4; i++) {
+        hR50PercentPT[i]->Draw("SAME");
+    }
+    TLegend * legendR50 = new TLegend(0.7, 0.7, 0.9, 0.9);
+    legendR50->SetHeader("Jets", "C");
+    for (int i = 0; i < 4; i++) {
+        legendR50->AddEntry(hR50PercentPT[i], Form("Jet %d", i+1), "l");
+    }
+    legendR50->Draw();
+
+    // R al 95%
+    TCanvas * cR95 = new TCanvas("cR95", "R al 95% del pT total del jet", 600, 400);
+    hR95PercentPT[0]->Draw();
+    for (int i = 1; i < 4; i++) {
+        hR95PercentPT[i]->Draw("SAME");
+    }
+    TLegend * legendR95 = new TLegend(0.7, 0.7, 0.9, 0.9);
+    legendR95->SetHeader("Jets", "C");
+    for (int i = 0; i < 4; i++) {
+        legendR95->AddEntry(hR95PercentPT[i], Form("Jet %d", i+1), "l");
+    }
+    legendR95->Draw();
+
     // Guardar los histogramas en un archivo
     cJets->Print("plots/JetsPerEvent.png");
     c1->Print("plots/PTjets.png");
     cEta->Print("plots/Etajets.png");
     cPhi->Print("plots/Phijets.png");
+    cRPar->Print("plots/RPar.png");
     cNCharged->Print("plots/NCharged.png");
     cNNeutrals->Print("plots/NNeutrals.png");
     cChargedPTFraction->Print("plots/ChargedPTFraction.png");
@@ -809,6 +974,8 @@ void graphsTree()
     cDeltaRMaxDR->Print("plots/DeltaRMaxDR.png");
     cDeltaRMinDR->Print("plots/DeltaRMinDR.png");
     cPTDifference->Print("plots/PTDifference.png");
+    cR50->Print("plots/R50.png");
+    cR95->Print("plots/R95.png");
 
     cout << "El archivo se escribió correctamente" << endl;
 

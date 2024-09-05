@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Tue Aug 27 22:53:34 2024 by ROOT version 6.28/10
+// Thu Sep  5 11:11:57 2024 by ROOT version 6.30/06
 // from TChain Delphes/
 //////////////////////////////////////////////////////////
 
