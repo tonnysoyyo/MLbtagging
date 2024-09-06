@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Sep  5 14:04:07 2024 by ROOT version 6.30/06
+// Fri Sep  6 08:00:01 2024 by ROOT version 6.30/06
 // from TChain Delphes/
 //////////////////////////////////////////////////////////
 
@@ -23,19 +23,19 @@ public :
 // Fixed size dimensions of array or collections stored in the TTree if any.
    static constexpr Int_t kMaxEvent = 1;
    static constexpr Int_t kMaxWeight = 2;
-   static constexpr Int_t kMaxParticle = 3926;
-   static constexpr Int_t kMaxTrack = 142;
-   static constexpr Int_t kMaxTower = 280;
-   static constexpr Int_t kMaxEFlowTrack = 142;
+   static constexpr Int_t kMaxParticle = 4164;
+   static constexpr Int_t kMaxTrack = 163;
+   static constexpr Int_t kMaxTower = 291;
+   static constexpr Int_t kMaxEFlowTrack = 163;
    static constexpr Int_t kMaxEFlowPhoton = 82;
-   static constexpr Int_t kMaxEFlowNeutralHadron = 162;
-   static constexpr Int_t kMaxGenJet = 7;
+   static constexpr Int_t kMaxEFlowNeutralHadron = 177;
+   static constexpr Int_t kMaxGenJet = 9;
    static constexpr Int_t kMaxGenMissingET = 1;
-   static constexpr Int_t kMaxJet = 6;
+   static constexpr Int_t kMaxJet = 8;
    static constexpr Int_t kMaxElectron = 1;
    static constexpr Int_t kMaxPhoton = 2;
    static constexpr Int_t kMaxMuon = 1;
-   static constexpr Int_t kMaxFatJet = 1;
+   static constexpr Int_t kMaxFatJet = 2;
    static constexpr Int_t kMaxMissingET = 1;
    static constexpr Int_t kMaxScalarHT = 1;
 
@@ -910,6 +910,9 @@ MyClass::MyClass(TTree *tree) : fChain(0)
       // of trees.
       TChain * chain = new TChain("Delphes","");
       chain->Add("../rootfiles/run_01.root/Delphes");
+      chain->Add("../rootfiles/run_02.root/Delphes");
+      chain->Add("../rootfiles/run_03.root/Delphes");
+      chain->Add("../rootfiles/run_04.root/Delphes");
       tree = chain;
 #endif // SINGLE_TREE
 
