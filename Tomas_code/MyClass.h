@@ -1,6 +1,10 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
+<<<<<<< HEAD
 // Fri Aug 30 12:52:15 2024 by ROOT version 6.28/10
+=======
+// Fri Sep  6 08:00:01 2024 by ROOT version 6.30/06
+>>>>>>> 080b8a5e5f3341c6c18fc060dbcf9cfdc226f065
 // from TChain Delphes/
 //////////////////////////////////////////////////////////
 
