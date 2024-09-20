@@ -14,14 +14,14 @@ void graphsTree()
     // Creamos un objeto TChain para leer los rootfiles
     TChain *ch = new TChain("Delphes", "");
     ch->Add("../rootfiles/run_01.root");
-    // ch->Add("../rootfiles/run_02.root");
-    // ch->Add("../rootfiles/run_03.root");
-    // ch->Add("../rootfiles/run_04.root");
+    ch->Add("../rootfiles/run_02.root");
+    ch->Add("../rootfiles/run_03.root");
+    ch->Add("../rootfiles/run_04.root");
 
     TTree *Delphes = (TTree*)ch;
     Delphes->MakeClass("MyClass"); // Crea la clase de lectura de la TTree
     MyClass t(Delphes); // Evalúa la clase de lectura de la TTree
-    Long64_t nentries = 10000;//t.fChain->GetEntries(); // Obtiene el número de entradas en la TTree 
+    Long64_t nentries = t.fChain->GetEntries(); // Obtiene el número de entradas en la TTree 
 
     // Jets por evento
     TH1F *hJetsPerEvent = new TH1F("hJetsPerEvent", "Numero de Jets por Evento", 100, 0, 6);
@@ -81,7 +81,7 @@ void graphsTree()
     // Número de partículas cargadas por jet
     TH1F *hChargedParticles[4];
     for (int i = 0; i < 4; i++) {
-        hChargedParticles[i] = new TH1F(Form("hChargedParticles%d", i), Form("Numero de Partículas Cargadas del Jet %d", i+1), 100, -0.5, 3.5);
+        hChargedParticles[i] = new TH1F(Form("hChargedParticles%d", i), Form("Numero de Partículas Cargadas del Jet %d", i+1), 100, -0.5, 20.0);
     // Asigna un color único a cada histograma
     if(i == 0) hChargedParticles[i]->SetLineColor(kRed);
     else if(i == 1) hChargedParticles[i]->SetLineColor(kBlue);
@@ -95,7 +95,7 @@ void graphsTree()
     // Número de neutras cargadas por jet
     TH1F *hNeutralsParticles[4];
     for (int i = 0; i < 4; i++) {
-        hNeutralsParticles[i] = new TH1F(Form("hNeutralsParticles%d", i), Form("Numero de Partículas Cargadas del Jet %d", i+1), 100, -0.5, 3.5);
+        hNeutralsParticles[i] = new TH1F(Form("hNeutralsParticles%d", i), Form("Numero de Partículas Cargadas del Jet %d", i+1), 100, -0.5, 20.0);
     // Asigna un color único a cada histograma
     if(i == 0) hNeutralsParticles[i]->SetLineColor(kRed);
     else if(i == 1) hNeutralsParticles[i]->SetLineColor(kBlue);
