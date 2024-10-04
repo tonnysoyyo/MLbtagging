@@ -29,7 +29,7 @@ void graphsTree()
     // pT de los jets
     TH1F *hJetPT[4];
     for (int i = 0; i < 4; i++) {
-    hJetPT[i] = new TH1F(Form("hJetPT%d", i), Form("pT del Jet %d", i+1), 150, 20, 180); // Ajusta los límites según sea necesario
+    hJetPT[i] = new TH1F(Form("hJetPT%d", i), Form("pT del Jet"), 150, 20, 180); // Ajusta los límites según sea necesario
     
     // Asigna un color único a cada histograma
     if(i == 0) hJetPT[i]->SetLineColor(kRed);
@@ -46,7 +46,7 @@ void graphsTree()
     // Eta de los jets
     TH1F *hJetEta[4];
     for (int i = 0; i < 4; i++) {
-        hJetEta[i] = new TH1F(Form("hJetEta%d", i), Form("Eta del Jet %d", i+1), 100, -5, 5); // Ajusta los límites según sea necesario
+        hJetEta[i] = new TH1F(Form("hJetEta%d", i), Form("Eta del Jet"), 100, -5, 5); // Ajusta los límites según sea necesario
     
     // Asigna un color único a cada histograma
     if(i == 0) hJetEta[i]->SetLineColor(kRed);
@@ -64,7 +64,7 @@ void graphsTree()
     // Phi de los jets
     TH1F *hJetPhi[4];
     for (int i = 0; i < 4; i++) {
-        hJetPhi[i] = new TH1F(Form("hJetPhi%d", i), Form("Phi del Jet %d", i+1), 100, -4, 4); // Ajusta los límites según sea necesario
+        hJetPhi[i] = new TH1F(Form("hJetPhi%d", i), Form("Phi del Jet"), 100, -4, 4); // Ajusta los límites según sea necesario
         // Asigna un color único a cada histograma
     if(i == 0) hJetPhi[i]->SetLineColor(kRed);
     else if(i == 1) hJetPhi[i]->SetLineColor(kBlue);
@@ -82,7 +82,7 @@ void graphsTree()
     TH1F *hDeltaRPar[6];
     for (int i = 0; i < 6; i++)
     {
-        hDeltaRPar[i] = new TH1F(Form("hDeltaRPar%d", i), Form("Delta R entre los primeros 4 jets, por parejas %d", i + 1), 36, 0, 9);
+        hDeltaRPar[i] = new TH1F(Form("hDeltaRPar%d", i), Form("Delta R entre los primeros 4 jets, por parejas"), 36, 0, 9);
         // Asigna un color único a cada histograma
         if (i == 0)
             hDeltaRPar[i]->SetLineColor(kRed);
@@ -106,7 +106,7 @@ void graphsTree()
     // Número de partículas cargadas por jet
     TH1F *hChargedParticles[4];
     for (int i = 0; i < 4; i++) {
-        hChargedParticles[i] = new TH1F(Form("hChargedParticles%d", i), Form("Numero de Partículas Cargadas del Jet %d", i+1), 100, -0.5, 20.0);
+        hChargedParticles[i] = new TH1F(Form("hChargedParticles%d", i), Form("Numero de Partículas Cargadas del Jet"), 50, 0, 50);
     // Asigna un color único a cada histograma
     if(i == 0) hChargedParticles[i]->SetLineColor(kRed);
     else if(i == 1) hChargedParticles[i]->SetLineColor(kBlue);
@@ -120,7 +120,7 @@ void graphsTree()
     // Número de neutras cargadas por jet
     TH1F *hNeutralsParticles[4];
     for (int i = 0; i < 4; i++) {
-        hNeutralsParticles[i] = new TH1F(Form("hNeutralsParticles%d", i), Form("Numero de Partículas neutras del Jet %d", i+1), 25, 0, 25);
+        hNeutralsParticles[i] = new TH1F(Form("hNeutralsParticles%d", i), Form("Numero de Partículas neutras del Jet"), 50, 0, 50);
     // Asigna un color único a cada histograma
     if(i == 0) hNeutralsParticles[i]->SetLineColor(kRed);
     else if(i == 1) hNeutralsParticles[i]->SetLineColor(kBlue);
@@ -134,7 +134,7 @@ void graphsTree()
     // Histograma de fracción de pT cargado del jet
     TH1F *hChargedPTFraction[4];
     for (int i = 0; i < 4; i++) {
-    hChargedPTFraction[i] = new TH1F(Form("hChargedPTFraction%d", i), Form("Fracción de pT cargado del Jet %d", i+1), 100, 0, 10); // cambie el limite superior de 1 a 2
+    hChargedPTFraction[i] = new TH1F(Form("hChargedPTFraction%d", i), Form("Fracción de pT cargado del Jet"), 100, 0, 1); // cambie el limite superior de 1 a 2
     
     // Asigna un color único a cada histograma
     if(i == 0) hChargedPTFraction[i]->SetLineColor(kRed);
@@ -149,7 +149,7 @@ void graphsTree()
     // Histograma de fracción de pT neutro del jet
     TH1F *hNeutralPTFraction[4];
     for (int i = 0; i < 4; i++) {
-    hNeutralPTFraction[i] = new TH1F(Form("hNeutralPTFraction%d", i), Form("Fracción de pT neutro del Jet %d", i+1), 100, 0, 1);
+    hNeutralPTFraction[i] = new TH1F(Form("hNeutralPTFraction%d", i), Form("Fracción de pT neutro del Jet"), 100, 0, 1);
     
     // Asigna un color único a cada histograma
     if(i == 0) hNeutralPTFraction[i]->SetLineColor(kRed);
@@ -164,7 +164,7 @@ void graphsTree()
     // Histograma del pT promedio de las partículas de cada jet
     TH1F *hAveragePT[4];
     for (int i = 0; i < 4; i++) {
-    hAveragePT[i] = new TH1F(Form("hAveragePT%d", i), Form("pT promedio de las partículas del Jet %d", i+1), 120, 0, 60);
+    hAveragePT[i] = new TH1F(Form("hAveragePT%d", i), Form("pT promedio de las partículas del Jet"), 120, 0, 60);
     
     // Asigna un color único a cada histograma
     if(i == 0) hAveragePT[i]->SetLineColor(kRed);
@@ -179,7 +179,7 @@ void graphsTree()
     // Histograma del número de partículas pertenecientes a un jet con pT por debajo del pT promedio por cada jet
     TH1F *hParticlesBelowAvgPT[4];
     for (int i = 0; i < 4; i++) {
-    hParticlesBelowAvgPT[i] = new TH1F(Form("hParticlesBelowAvgPT%d", i), Form("Número de partículas con pT < pT promedio del Jet %d", i+1), 100, 0, 100);//Cambie el limite superior de 50 a 80
+    hParticlesBelowAvgPT[i] = new TH1F(Form("hParticlesBelowAvgPT%d", i), Form("Número de partículas con pT < pT promedio del Jet"), 100, 0, 100);//Cambie el limite superior de 50 a 80
     
     // Asigna un color único a cada histograma
     if(i == 0) hParticlesBelowAvgPT[i]->SetLineColor(kRed);
@@ -194,7 +194,7 @@ void graphsTree()
     // Histograma del número de partículas pertenecientes a un jet con pT por encima del pT promedio por cada jet
     TH1F *hParticlesAboveAvgPT[4];
     for (int i = 0; i < 4; i++) {
-    hParticlesAboveAvgPT[i] = new TH1F(Form("hParticlesAboveAvgPT%d", i), Form("Número de partículas con pT > pT promedio del Jet %d", i+1), 45, 0, 45);
+    hParticlesAboveAvgPT[i] = new TH1F(Form("hParticlesAboveAvgPT%d", i), Form("Número de partículas con pT > pT promedio del Jet"), 100, 0, 100);
         
     // Asigna un color único a cada histograma
     if(i == 0) hParticlesAboveAvgPT[i]->SetLineColor(kRed);
@@ -209,7 +209,7 @@ void graphsTree()
     // Histograma de pT(par_max_pT) / pT(j_r).
     TH1F *hMaxPTRatio[4];
     for (int i = 0; i < 4; i++) {
-    hMaxPTRatio[i] = new TH1F(Form("hMaxPTRatio%d", i), Form("pT(par_max_pT) / pT(j_r) del Jet %d", i+1), 100, 0, 3.5);// cambie el limite superior de 1.5 a 2
+    hMaxPTRatio[i] = new TH1F(Form("hMaxPTRatio%d", i), Form("pT(par_max_pT) / pT(j_r) del Jet"), 100, 0, 5);// cambie el limite superior de 1.5 a 2
     
     // Asigna un color único a cada histograma
     if(i == 0) hMaxPTRatio[i]->SetLineColor(kRed);
@@ -224,7 +224,7 @@ void graphsTree()
     // Histograma de pT(par_min_pT) / pT(j_r).
     TH1F *hMinPTRatio[4];
     for (int i = 0; i < 4; i++) {
-    hMinPTRatio[i] = new TH1F(Form("hMinPTRatio%d", i), Form("pT(par_min_pT) / pT(j_r) del Jet %d", i+1), 100, 0, 0.15);
+    hMinPTRatio[i] = new TH1F(Form("hMinPTRatio%d", i), Form("pT(par_min_pT) / pT(j_r) del Jet"), 100, 0, 0.15);
     
     // Asigna un color único a cada histograma
     if(i == 0) hMinPTRatio[i]->SetLineColor(kRed);
@@ -239,7 +239,7 @@ void graphsTree()
     // Histograma de pT(par_max_DR) / pT(j_r)
     TH1F *hMaxDRRatio[4];
     for (int i = 0; i < 4; i++) {
-    hMaxDRRatio[i] = new TH1F(Form("hMaxDRRatio%d", i), Form("pT(par_max_DR) / pT(j_r) del Jet %d", i+1), 100, 0, 2);
+    hMaxDRRatio[i] = new TH1F(Form("hMaxDRRatio%d", i), Form("pT(par_max_DR) / pT(j_r) del Jet"), 100, 0, 5);
     
     // Asigna un color único a cada histograma
     if(i == 0) hMaxDRRatio[i]->SetLineColor(kRed);
@@ -254,7 +254,7 @@ void graphsTree()
     // Histogram de pT(par_min_DR) / pT(j_r)
     TH1F *hMinDRRatio[4];
     for (int i = 0; i < 4; i++) {
-    hMinDRRatio[i] = new TH1F(Form("hMinDRRatio%d", i), Form("pT(par_min_DR) / pT(j_r) del Jet %d", i+1), 100, 0, 3);
+    hMinDRRatio[i] = new TH1F(Form("hMinDRRatio%d", i), Form("pT(par_min_DR) / pT(j_r) del Jet"), 100, 0, 5);
     
     // Asigna un color único a cada histograma
     if(i == 0) hMinDRRatio[i]->SetLineColor(kRed);
@@ -269,7 +269,7 @@ void graphsTree()
     // Histograma de DeltaR(par_max_pT, j_r)
     TH1F *hDeltaRMaxPT[4];
     for (int i = 0; i < 4; i++) {
-    hDeltaRMaxPT[i] = new TH1F(Form("hDeltaRMaxPT%d", i), Form("DeltaR(par_max_pT, j_r) del Jet %d", i+1), 100, 0, 0.45);
+    hDeltaRMaxPT[i] = new TH1F(Form("hDeltaRMaxPT%d", i), Form("DeltaR(par_max_pT, j_r) del Jet"), 100, 0, 0.4);
     
     // Asigna un color único a cada histograma
     if(i == 0) hDeltaRMaxPT[i]->SetLineColor(kRed);
@@ -284,7 +284,7 @@ void graphsTree()
     // Histograma de DeltaR(par_min_pT, j_r)
     TH1F *hDeltaRMinPT[4];
     for (int i = 0; i < 4; i++) {
-    hDeltaRMinPT[i] = new TH1F(Form("hDeltaRMinPT%d", i), Form("DeltaR(par_min_pT, j_r) del Jet %d", i+1), 100, 0, 0.45);
+    hDeltaRMinPT[i] = new TH1F(Form("hDeltaRMinPT%d", i), Form("DeltaR(par_min_pT, j_r) del Jet"), 100, 0, 0.4);
     
     // Asigna un color único a cada histograma
     if(i == 0) hDeltaRMinPT[i]->SetLineColor(kRed);
@@ -299,7 +299,7 @@ void graphsTree()
     // Histograma de DeltaR(par_max_DR, j_r)
     TH1F *hDeltaRMaxDR[4];
     for (int i = 0; i < 4; i++) {
-    hDeltaRMaxDR[i] = new TH1F(Form("hDeltaRMaxDR%d", i), Form("DeltaR(par_max_DR, j_r) del Jet %d", i+1), 100, 0, 0.45);
+    hDeltaRMaxDR[i] = new TH1F(Form("hDeltaRMaxDR%d", i), Form("DeltaR(par_max_DR, j_r) del Jet"), 100, 0, 0.4);
     
     // Asigna un color único a cada histograma
     if(i == 0) hDeltaRMaxDR[i]->SetLineColor(kRed);
@@ -314,7 +314,7 @@ void graphsTree()
     // Histograma de DeltaR(par_min_DR, j_r)
     TH1F *hDeltaRMinDR[4];
     for (int i = 0; i < 4; i++) {
-    hDeltaRMinDR[i] = new TH1F(Form("hDeltaRMinDR%d", i), Form("DeltaR(par_min_DR, j_r) del Jet %d", i+1), 100, 0, 0.4);
+    hDeltaRMinDR[i] = new TH1F(Form("hDeltaRMinDR%d", i), Form("DeltaR(par_min_DR, j_r) del Jet"), 100, 0, 0.4);
     
     // Asigna un color único a cada histograma
     if(i == 0) hDeltaRMinDR[i]->SetLineColor(kRed);
@@ -329,7 +329,7 @@ void graphsTree()
     // Histogram de pT(par_max_pT) - pT(par_min_pT)
     TH1F *hPTDifference[4];
     for (int i = 0; i < 4; i++) {
-    hPTDifference[i] = new TH1F(Form("hPTDifference%d", i), Form("pT(par_max_pT) - pT(par_min_pT) del Jet %d", i+1), 80, 0, 170);
+    hPTDifference[i] = new TH1F(Form("hPTDifference%d", i), Form("pT(par_max_pT) - pT(par_min_pT) del Jet"), 80, 0, 200);
     
     // Assign a unique color to each histogram
     if(i == 0) hPTDifference[i]->SetLineColor(kRed);
@@ -344,7 +344,7 @@ void graphsTree()
     // Histogram for R containing 50% of the total pT from the jet center for each jet
     TH1F *hR50PercentPT[4];
     for (int i = 0; i < 4; i++) {
-    hR50PercentPT[i] = new TH1F(Form("hR50PercentPT%d", i), Form("R para 50%% pT total del Jet %d", i+1), 100, 0, 0.45);
+    hR50PercentPT[i] = new TH1F(Form("hR50PercentPT%d", i), Form("R para 50%% pT total del Jet"), 100, 0, 0.4);
     
     // Assign a unique color to each histogram
     if(i == 0) hR50PercentPT[i]->SetLineColor(kRed);
@@ -360,7 +360,7 @@ void graphsTree()
     TH1F *hR95PercentPT[4];
     for (int i = 0; i < 4; i++) 
     {
-        hR95PercentPT[i] = new TH1F(Form("hR95PercentPT%d", i), Form("R para 95%% pT total del Jet %d", i+1), 100, 0, 0.45);
+        hR95PercentPT[i] = new TH1F(Form("hR95PercentPT%d", i), Form("R para 95%% pT total del Jet"), 100, 0, 0.4);
         // Assign a unique color to each histogram
         if(i == 0) hR95PercentPT[i]->SetLineColor(kRed);
         else if(i == 1) hR95PercentPT[i]->SetLineColor(kBlue);
@@ -530,8 +530,9 @@ void graphsTree()
         }
 
         // Calculate fraction of charged pT
-        Double_t chargedPTFraction = chargedPTSum.Pt() / jetVector.Pt();
-        Double_t neutralPTFraction = neutralPTSum.Pt() / jetVector.Pt();
+        Double_t totalPT = chargedPTSum.Pt() + neutralPTSum.Pt();
+        Double_t chargedPTFraction = chargedPTSum.Pt() / totalPT;
+        Double_t neutralPTFraction = neutralPTSum.Pt() / totalPT;
         Double_t averagePT = (countParticles > 0) ? (sumPT / countParticles) : 0;
 
         Double_t maxPTRatio = (jetVector.Pt() > 0) ? (maxPTParticle.Pt() / jetVector.Pt()) : 0;
