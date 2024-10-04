@@ -106,11 +106,7 @@ void graphsTree()
     // Número de partículas cargadas por jet
     TH1F *hChargedParticles[4];
     for (int i = 0; i < 4; i++) {
-<<<<<<< HEAD
         hChargedParticles[i] = new TH1F(Form("hChargedParticles%d", i), Form("Numero de Partículas Cargadas del Jet %d", i+1), 100, -0.5, 20.0);
-=======
-        hChargedParticles[i] = new TH1F(Form("hChargedParticles%d", i), Form("Numero de Partículas Cargadas del Jet %d", i+1), 25, 0, 25);
->>>>>>> 080b8a5e5f3341c6c18fc060dbcf9cfdc226f065
     // Asigna un color único a cada histograma
     if(i == 0) hChargedParticles[i]->SetLineColor(kRed);
     else if(i == 1) hChargedParticles[i]->SetLineColor(kBlue);
@@ -124,11 +120,7 @@ void graphsTree()
     // Número de neutras cargadas por jet
     TH1F *hNeutralsParticles[4];
     for (int i = 0; i < 4; i++) {
-<<<<<<< HEAD
-        hNeutralsParticles[i] = new TH1F(Form("hNeutralsParticles%d", i), Form("Numero de Partículas Cargadas del Jet %d", i+1), 100, -0.5, 20.0);
-=======
         hNeutralsParticles[i] = new TH1F(Form("hNeutralsParticles%d", i), Form("Numero de Partículas neutras del Jet %d", i+1), 25, 0, 25);
->>>>>>> 080b8a5e5f3341c6c18fc060dbcf9cfdc226f065
     // Asigna un color único a cada histograma
     if(i == 0) hNeutralsParticles[i]->SetLineColor(kRed);
     else if(i == 1) hNeutralsParticles[i]->SetLineColor(kBlue);
