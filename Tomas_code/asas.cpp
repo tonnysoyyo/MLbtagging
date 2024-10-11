@@ -359,25 +359,6 @@ void graphsTree()
         hR95PercentPT[i]->SetLineWidth(2);
     }
 
-    // Añadir los histogramas 2D para cada jet
-    TH2F *hCumulativePT_vs_DeltaR[4];
-    for (int i = 0; i < 4; i++) {
-        hCumulativePT_vs_DeltaR[i] = new TH2F(Form("hCumulativePT_vs_DeltaR%d", i+1),
-                                            Form("DeltaR vs Porcentaje acumulado de pT del Jet %d", i+1),
-                                            50, 0, 0.4,    // Eje X: DeltaR (0 - 0.4)
-                                            50, 0, 1.0);   // Eje Y: Porcentaje acumulado de pT (0% - 100%)
-
-
-        // Asigna un color único a cada histograma
-        if(i == 0) hCumulativePT_vs_DeltaR[i]->SetLineColor(kRed);
-        else if(i == 1) hCumulativePT_vs_DeltaR[i]->SetLineColor(kBlue);
-        else if(i == 2) hCumulativePT_vs_DeltaR[i]->SetLineColor(kGreen);
-        else if(i == 3) hCumulativePT_vs_DeltaR[i]->SetLineColor(kBlack);
-
-        // Opcional: Establece el grosor de la línea
-        hCumulativePT_vs_DeltaR[i]->SetLineWidth(2);
-    }
-
     cout << "Entries: " << nentries << endl;
 
     Int_t nTen = nentries / 10; // Para imprimir el porcentaje de avance
@@ -550,41 +531,6 @@ void graphsTree()
             hDeltaRMaxDR[i]->Fill(deltaRMaxDR);
             hDeltaRMinDR[i]->Fill(deltaRMinDR);
             hPTDifference[i]->Fill(ptDifference);
-
-            // Añadir el cálculo para el histograma 2D aquí
-            std::vector<std::pair<double, double>> deltaR_pT_pairs;
-
-            // Obtener las partículas asociadas al jet y calcular DeltaR y pT
-            double totalJetPT = 0.0;
-            for (Int_t j = 0; j < t.Particle_size; j++) {
-                TLorentzVector particleVector;
-                particleVector.SetPtEtaPhiM(t.Particle_PT[j], t.Particle_Eta[j], t.Particle_Phi[j], t.Particle_Mass[j]);
-
-                double deltaR = jetVector.DeltaR(particleVector);
-                if (deltaR < 0.4) { // Partículas dentro del jet
-                    deltaR_pT_pairs.push_back(std::make_pair(deltaR, particleVector.Pt()));
-                    totalJetPT += particleVector.Pt();
-                }
-            }
-
-            // Verificar que totalJetPT no sea cero para evitar divisiones por cero
-            if (totalJetPT == 0.0) continue;
-
-            // Ordenar las partículas por DeltaR
-            std::sort(deltaR_pT_pairs.begin(), deltaR_pT_pairs.end());
-
-            // Calcular el porcentaje acumulado de pT y llenar el histograma 2D
-            double cumulativePT = 0.0;
-            for (const auto& pair : deltaR_pT_pairs) {
-                cumulativePT += pair.second; // Sumar el pT de la partícula
-                double cumulativePTFraction = cumulativePT / totalJetPT; // Porcentaje acumulado de pT
-                double deltaR = pair.first;
-
-                // Llenar el histograma 2D
-                // Llenar el histograma 2D con ejes intercambiados
-                hCumulativePT_vs_DeltaR[i]->Fill(deltaR, cumulativePTFraction);
-
-            }
         }
 
         // R para 50% del pT total del jet
@@ -709,7 +655,7 @@ void graphsTree()
 
     TCanvas *cRPar = new TCanvas("cRPar", "R entre la primeras 4 parejas de jets", 600, 400);
     gStyle->SetOptStat(0); // Desactiva la caja de estadísticas para todos los histogramas
-    gPad->SetLogy(); // Escala logarítmica en el eje y
+    //gPad->SetLogy(); // Escala logarítmica en el eje y
     hDeltaRPar[0]->Draw(); // Dibuja el primer histograma
     for (int i = 1; i < 6; i++) {
         hDeltaRPar[i]->Draw("SAME"); // Superpone los siguientes histogramas
@@ -979,22 +925,6 @@ void graphsTree()
         legendR95->AddEntry(hR95PercentPT[i], Form("Jet %d", i+1), "l");
     }
     legendR95->Draw();
-
-    for (int i = 0; i < 4; i++) {
-        TCanvas *cCumulativePT_vs_DeltaR = new TCanvas(Form("cCumulativePT_vs_DeltaR%d", i+1),
-                                                    Form("Porcentaje acumulado de pT vs DeltaR del Jet %d", i+1),
-                                                    600, 400);
-
-        // Dibujar el histograma 2D
-        hCumulativePT_vs_DeltaR[i]->GetXaxis()->SetTitle("#DeltaR");
-        hCumulativePT_vs_DeltaR[i]->GetYaxis()->SetTitle("Porcentaje acumulado de pT");
-        hCumulativePT_vs_DeltaR[i]->Draw("COLZ");
-
-
-        // Guardar el histograma
-        cCumulativePT_vs_DeltaR->Print(Form("plots/CumulativePT_vs_DeltaR_Jet%d.png", i+1));
-    }
-
 
     // Guardar los histogramas en un archivo
     cJets->Print("plots/JetsPerEvent.png");
